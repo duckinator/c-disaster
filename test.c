@@ -1,6 +1,6 @@
-#include <stdio.h>
-#include <stdint.h>
 #include <stdbool.h>
+#include <stdint.h>
+#include <stdio.h>
 
 int  _0[ 1] = {0,};
 int  _1[ 2] = {0,};
@@ -29,7 +29,7 @@ int _10[11] = {0,};
 
 #define Okay(TYPE, DATA) { .as.TYPE = DATA, .type = _##TYPE, .is_okay = true  }
 #define Err(TYPE, DATA)  { .as.TYPE = DATA, .type = _##TYPE, .is_okay = false }
-#define Value(TYPE, e) ((e).as.TYPE)
+#define Value(e) EitherFn(e.type)(e)
 
 enum SourceOfAnxietyType {
     _data,
@@ -85,6 +85,7 @@ int main()
 
     Either e = Okay(i32, 1234);
     printf("e == %i\n", EitherFn(7)(e));
+//    printf("e == %i\n", Value(e));
 
     Either b = Err(i32, -1);
     printf("b == %i   (okay? %s)\n", b.as.i32, b.is_okay ? "yes" : "no");
