@@ -2,32 +2,17 @@
 #include <stdint.h>
 #include <stdbool.h>
 
-#define __intx_count0  0
-#define __intx_count1  __intx_count0,0
-#define __intx_count2  __intx_count1,0
-#define __intx_count3  __intx_count2,0
-#define __intx_count4  __intx_count3,0
-#define __intx_count5  __intx_count4,0
-#define __intx_count6  __intx_count5,0
-#define __intx_count7  __intx_count6,0
-#define __intx_count8  __intx_count7,0
-#define __intx_count9  __intx_count8,0
-#define __intx_count10 __intx_count9,0
-
-#define intx2(x, count) int _##x[x + 1] = {count}
-#define intx(x) intx2(x, __intx_count##x)
-
-intx( 0);
-intx( 1);
-intx( 2);
-intx( 3);
-intx( 4);
-intx( 5);
-intx( 6);
-intx( 7);
-intx( 8);
-intx( 9);
-intx(10);
+int _0[1] = {0,};
+int _1[2] = {0,};
+int _2[3] = {0,};
+int _3[4] = {0,};
+int _4[5] = {0,};
+int _5[6] = {0,};
+int _6[7] = {0,};
+int _7[8] = {0,};
+int _8[9] = {0,};
+int _9[10] = {0,};
+int _10[11] = {0,};
 
 #define EitherFn(TYPE) _Generic((&_##TYPE),  \
                                 int(*)[ 1]: either_getfn_data, \
