@@ -14,7 +14,7 @@ int _u32 [ 9] = {0,};
 int _i64 [10] = {0,};
 int _u64 [11] = {0,};
 
-#define Value(e) _Generic(((int(*)[sizeof(e.typeary)])(e.typeary)),  \
+#define Value(e) _Generic(((int(*)[sizeof(e.type)])(e.type)),  \
                             int(*)[ 1]: either_getfn_data, \
                             int(*)[ 2]: either_getfn_str,  \
                             int(*)[ 3]: either_getfn_chr,  \
