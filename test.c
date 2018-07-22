@@ -2,20 +2,9 @@
 #include <stdint.h>
 #include <stdbool.h>
 
-#define Value(e) (   (e.type == _data) ? (void* )e.as.data : \
-                    ((e.type == _str ) ? (char* )e.as.str  : \
-                    ((e.type == _chr ) ? (char)e.as.chr  : \
-                    ((e.type == _i8  ) ? ( int8_t )e.as.i8   : \
-                    ((e.type == _u8  ) ? (uint8_t )e.as.u8   : \
-                    ((e.type == _i16 ) ? ( int16_t)e.as.i16  : \
-                    ((e.type == _u16 ) ? (uint16_t)e.as.u16  : \
-                    ((e.type == _i32 ) ? ( int32_t)e.as.i32  : \
-                    ((e.type == _u32 ) ? (uint32_t)e.as.u32  : \
-                    ((e.type == _i64 ) ? ( int64_t)e.as.i64  : \
-                    ((e.type == _u64 ) ? (uint64_t)e.as.u64  : -1 )))))))))))
-
 #define Okay(TYPE, DATA) { .as.TYPE = DATA, .type = _##TYPE, .is_okay = true  }
 #define Err(TYPE, DATA)  { .as.TYPE = DATA, .type = _##TYPE, .is_okay = false }
+//#define Value(e) /* ... */
 
 enum SourceOfAnxietyType {
     _data,
@@ -76,8 +65,6 @@ struct either_getfns_s {
     int64_t     (* _9)(Either e);
     uint64_t    (*_10)(Either e);
 };
-
-typedef void *(*eithervoidptr)(Either e);
 
 struct either_getfns_s EitherGetFns = {
     &either_getfn_data,
