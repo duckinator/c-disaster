@@ -2,6 +2,46 @@
 #include <stdint.h>
 #include <stdbool.h>
 
+#define __intx_count0  0
+#define __intx_count1  __intx_count0,0
+#define __intx_count2  __intx_count1,0
+#define __intx_count3  __intx_count2,0
+#define __intx_count4  __intx_count3,0
+#define __intx_count5  __intx_count4,0
+#define __intx_count6  __intx_count5,0
+#define __intx_count7  __intx_count6,0
+#define __intx_count8  __intx_count7,0
+#define __intx_count9  __intx_count8,0
+#define __intx_count10 __intx_count9,0
+
+#define intx2(x, count) int _##x[x + 1] = {count}
+#define intx(x) intx2(x, __intx_count##x)
+
+intx( 0);
+intx( 1);
+intx( 2);
+intx( 3);
+intx( 4);
+intx( 5);
+intx( 6);
+intx( 7);
+intx( 8);
+intx( 9);
+intx(10);
+
+#define EitherFn(TYPE) _Generic((&_##TYPE),  \
+                                int(*)[ 1]: either_getfn_data, \
+                                int(*)[ 2]: either_getfn_str,  \
+                                int(*)[ 3]: either_getfn_chr,  \
+                                int(*)[ 4]: either_getfn_i8,   \
+                                int(*)[ 5]: either_getfn_u8,   \
+                                int(*)[ 6]: either_getfn_i16,  \
+                                int(*)[ 7]: either_getfn_u16,  \
+                                int(*)[ 8]: either_getfn_i32,  \
+                                int(*)[ 9]: either_getfn_u32,  \
+                                int(*)[10]: either_getfn_i64,  \
+                                int(*)[11]: either_getfn_u64)
+
 #define Okay(TYPE, DATA) { .as.TYPE = DATA, .type = _##TYPE, .is_okay = true  }
 #define Err(TYPE, DATA)  { .as.TYPE = DATA, .type = _##TYPE, .is_okay = false }
 #define Value(TYPE, e) ((e).as.TYPE)
@@ -47,38 +87,10 @@ int8_t   either_getfn_i8  (Either e) { return e.as.i8;   }
 uint8_t  either_getfn_u8  (Either e) { return e.as.u8;   }
 int16_t  either_getfn_i16 (Either e) { return e.as.i16;  }
 uint16_t either_getfn_u16 (Either e) { return e.as.u16;  }
-int32_t  either_getfn_i32 (Either e) { return e.as.i32;  }
+int32_t  either_getfn_i32 (Either e) { printf("i32!\n"); return e.as.i32;  }
 uint32_t either_getfn_u32 (Either e) { return e.as.u32;  }
 int64_t  either_getfn_i64 (Either e) { return e.as.i64;  }
-uint64_t either_getfn_u64 (Either e) { return e.as.u64;  }
-
-struct either_getfns_s {
-    void       *(* _0)(Either e);
-    char       *(* _1)(Either e);
-    char        (* _2)(Either e);
-    int8_t      (* _3)(Either e);
-    uint8_t     (* _4)(Either e);
-    int16_t     (* _5)(Either e);
-    uint16_t    (* _6)(Either e);
-    int32_t     (* _7)(Either e);
-    uint32_t    (* _8)(Either e);
-    int64_t     (* _9)(Either e);
-    uint64_t    (*_10)(Either e);
-};
-
-struct either_getfns_s EitherGetFns = {
-    &either_getfn_data,
-    &either_getfn_str,
-    &either_getfn_chr,
-    &either_getfn_i8,
-    &either_getfn_u8,
-    &either_getfn_i16,
-    &either_getfn_u16,
-    &either_getfn_i32,
-    &either_getfn_u32,
-    &either_getfn_i64,
-    &either_getfn_u64,
-};
+uint64_t either_getfn_u64 (Either e) { printf("u64!\n"); return e.as.u64;  }
 
 int main()
 {
@@ -87,8 +99,7 @@ int main()
     //printf("Value = %i\n", Value(a));
 
     Either e = Okay(i32, 1234);
-    printf("Value = %i\n", EitherGetFns._7(e));
-    printf("Value = %i\n", Value(i32, e));
+    printf("e == %i\n", EitherFn(7)(e));
 
     Either b = Err(i32, -1);
     printf("b == %i   (okay? %s)\n", b.as.i32, b.is_okay ? "yes" : "no");
