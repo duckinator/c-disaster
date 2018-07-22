@@ -4,7 +4,7 @@
 
 #define Okay(TYPE, DATA) { .as.TYPE = DATA, .type = _##TYPE, .is_okay = true  }
 #define Err(TYPE, DATA)  { .as.TYPE = DATA, .type = _##TYPE, .is_okay = false }
-//#define Value(e) /* ... */
+#define Value(TYPE, e) ((e).as.TYPE)
 
 enum SourceOfAnxietyType {
     _data,
@@ -83,11 +83,12 @@ struct either_getfns_s EitherGetFns = {
 int main()
 {
     Either a = Okay(i32, 1234);
-    Either e = Okay(i32, 1234);
     printf("a == %i (okay? %s)\n", a.as.i32, a.is_okay ? "yes" : "no");
     //printf("Value = %i\n", Value(a));
 
+    Either e = Okay(i32, 1234);
     printf("Value = %i\n", EitherGetFns._7(e));
+    printf("Value = %i\n", Value(i32, e));
 
     Either b = Err(i32, -1);
     printf("b == %i   (okay? %s)\n", b.as.i32, b.is_okay ? "yes" : "no");
