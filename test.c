@@ -49,7 +49,6 @@ typedef struct either_s {
     union SourceOfAnxiety as;
     enum SourceOfAnxietyType type;
     bool is_okay;
-    uint64_t *__hack;
 } Either;
 
 void    *either_getfn_data(Either e) { return e.as.data; }
@@ -98,32 +97,13 @@ int main()
 {
     Either a = Okay(i32, 1234);
     Either e = Okay(i32, 1234);
-    printf("okay? %s\n  a == %i\n", a.is_okay ? "yes" : "no", a.as.i32);
-    printf("%i\n", a.type);
-    printf("%i\n", _str);
+    printf("a == %i (okay? %s)\n", a.as.i32, a.is_okay ? "yes" : "no");
     //printf("Value = %i\n", Value(a));
-    e.__hack = (uint64_t*)&e.as.i32;
 
-/*    printf("Value = %i\n", *(
-        (e.type == _data && ((void**)  e.__hack)) ||
-        (e.type == _str  && ((char**)  e.__hack)) ||
-        (e.type == _i32  && ((int32_t*)e.__hack))
-    ));*/
-
-    printf("e == ");
-    if (e.type == _data) {
-        printf("%p\n", *(void**)e.__hack);
-    } else if (e.type == _str) {
-        printf("%s\n", *(char**)e.__hack);
-    } else if (e.type == _i32) {
-        printf("%i\n", *((int32_t*)e.__hack));
-    } else {
-        printf("other\n");
-    }
-
+    printf("Value = %i\n", EitherGetFns._7(e));
 
     Either b = Err(i32, -1);
-    printf("okay? %s\n  b == %i\n", b.is_okay ? "yes" : "no", b.as.i32);
+    printf("b == %i   (okay? %s)\n", b.as.i32, b.is_okay ? "yes" : "no");
 
     return 0;
 }
