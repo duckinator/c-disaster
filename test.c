@@ -54,10 +54,10 @@ int main()
 {
     Either a = Okay(i32, 1234);
     printf("a == %i (okay? %s)\n", a.as.i32, a.is_okay ? "yes" : "no");
-    //printf("Value = %i\n", Value(a));
+    printf("Value = %i\n", Value(a));
 
-    Either e = Okay(i32, 1234);
-    printf("e == %i\n", Value(e));
+    Either e = Okay(str, "awoo");
+    printf("e == %s\n", Value(e));
 
     Either b = Err(i32, -1);
     printf("b == %i   (okay? %s)\n", b.as.i32, b.is_okay ? "yes" : "no");
