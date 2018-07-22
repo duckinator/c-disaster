@@ -15,34 +15,20 @@ int _i64 [10] = {0,};
 int _u64 [11] = {0,};
 
 #define Value(e) _Generic(((int(*)[sizeof(e.typeary)])(e.typeary)),  \
-                            int(*)[ 1]: either_getfn_data, \
-                            int(*)[ 2]: either_getfn_str,  \
-                            int(*)[ 3]: either_getfn_chr,  \
-                            int(*)[ 4]: either_getfn_i8,   \
-                            int(*)[ 5]: either_getfn_u8,   \
-                            int(*)[ 6]: either_getfn_i16,  \
-                            int(*)[ 7]: either_getfn_u16,  \
-                            int(*)[ 8]: either_getfn_i32,  \
-                            int(*)[ 9]: either_getfn_u32,  \
-                            int(*)[10]: either_getfn_i64,  \
-                            int(*)[11]: either_getfn_u64)(e)
+                            int(*)[ 1]: e.as.data, \
+                            int(*)[ 2]: e.as.str,  \
+                            int(*)[ 3]: e.as.chr,  \
+                            int(*)[ 4]: e.as.i8,   \
+                            int(*)[ 5]: e.as.u8,   \
+                            int(*)[ 6]: e.as.i16,  \
+                            int(*)[ 7]: e.as.u16,  \
+                            int(*)[ 8]: e.as.i32,  \
+                            int(*)[ 9]: e.as.u32,  \
+                            int(*)[10]: e.as.i64,  \
+                            int(*)[11]: e.as.u64)
 
 #define Okay(TYPE, DATA) { .as.TYPE = DATA, .typeary = &_##TYPE, .is_okay = true  }
 #define Err(TYPE, DATA)  { .as.TYPE = DATA, .typeary = &_##TYPE, .is_okay = false }
-
-/*enum SourceOfAnxietyType {
-    _data,
-    _str,
-    _chr,
-    _i8,
-    _u8,
-    _i16,
-    _u16,
-    _i32,
-    _u32,
-    _i64,
-    _u64,
-};*/
 
 union SourceOfAnxiety {
     void    *data;
@@ -63,18 +49,6 @@ typedef struct either_s {
     int (*typeary)[];
     bool is_okay;
 } Either;
-
-void    *either_getfn_data(Either e) { return e.as.data; }
-char    *either_getfn_str (Either e) { return e.as.str;  }
-char     either_getfn_chr (Either e) { return e.as.chr;  }
-int8_t   either_getfn_i8  (Either e) { return e.as.i8;   }
-uint8_t  either_getfn_u8  (Either e) { return e.as.u8;   }
-int16_t  either_getfn_i16 (Either e) { return e.as.i16;  }
-uint16_t either_getfn_u16 (Either e) { return e.as.u16;  }
-int32_t  either_getfn_i32 (Either e) { return e.as.i32;  }
-uint32_t either_getfn_u32 (Either e) { return e.as.u32;  }
-int64_t  either_getfn_i64 (Either e) { return e.as.i64;  }
-uint64_t either_getfn_u64 (Either e) { return e.as.u64;  }
 
 int main()
 {
