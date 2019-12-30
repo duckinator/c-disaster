@@ -2,21 +2,31 @@
 #include <stdint.h>
 #include <stdio.h>
 
-typedef int _data[1];
-typedef int _str[2];
-typedef int _chr[3];
-typedef int _i8[4];
-typedef int _u8[5];
-typedef int _i16[6];
-typedef int _u16[7];
-typedef int _i32[8];
-typedef int _u32[9];
-typedef int _i64[10];
-typedef int _u64[11];
+#define count1 0
+#define count2 count1,0
+#define count3 count2,0
+#define count4 count3,0
+#define count5 count4,0
+#define count6 count5,0
+#define count7 count6,0
+#define count8 count7,0
+#define count9 count8,0
+#define count10 count9,0
+#define count11 count10,0
 
-_u64 sadness = {0,};
+#define _data {count1}
+#define _str  {count2}
+#define _chr  {count3}
+#define _i8   {count4}
+#define _u8   {count5}
+#define _i16  {count6}
+#define _u16  {count7}
+#define _i32  {count8}
+#define _u32  {count9}
+#define _i64  {count10}
+#define _u64  {count11}
 
-#define Value(e) _Generic(  ((int(*)[sizeof(e.type) / sizeof(int)])&sadness),\
+#define Value(e) _Generic(  &((int[])e.type),\
                             int(*)[ 1]: either_getfn_data,  \
                             int(*)[ 2]: either_getfn_str,   \
                             int(*)[ 3]: either_getfn_chr,   \
@@ -29,8 +39,10 @@ _u64 sadness = {0,};
                             int(*)[10]: either_getfn_i64,   \
                             int(*)[11]: either_getfn_u64)(e)
 
-#define Okay(TYPE, DATA) {.as.TYPE = DATA, .type = (_##TYPE*)&sadness, .is_okay = true}
-#define Err(TYPE, DATA)  {.as.TYPE = DATA, .type = (_##TYPE*)&sadness, .is_okay = false}
+#define EitherStruct(TYPE, DATA, OKAY) ((struct { union SourceOfAnxiety as; bool is_okay; int type[]; }){.as.TYPE=DATA, OKAY, _##TYPE})
+
+#define Okay(TYPE, DATA) ({.as.TYPE=DATA, true,  _##TYPE}
+#define Err(TYPE, DATA)  {.as.TYPE=DATA, false, _##TYPE}
 
 union SourceOfAnxiety {
     void    *data;
@@ -48,8 +60,8 @@ union SourceOfAnxiety {
 
 typedef struct either_s {
     union SourceOfAnxiety as;
-    int (*type)[];
     bool is_okay;
+    int type[];
 } Either;
 
 void    *either_getfn_data(Either e) { printf("data\n"); return e.as.data; }
@@ -66,9 +78,11 @@ uint64_t either_getfn_u64 (Either e) { printf("u64\n"); return e.as.u64;  }
 
 int main()
 {
-    Either a = Okay(i32, 1234);
+    Either x = (Either)(struct { union SourceOfAnxiety as; bool is_okay; int type[8]; }){.as.i32=1234, true, _i32};
+
+/*    Either a = Okay(i32, 1234);
     printf("a == %i (okay? %s)\n", a.as.i32, a.is_okay ? "yes" : "no");
-    printf("Value = %i\n", Value(a));
+//    printf("Value = %i\n", Value(a));
 
     Either e = Okay(str, "awoo");
     printf("e.type = %lu\n", sizeof(e.type));
@@ -76,6 +90,6 @@ int main()
 
     Either b = Err(i32, -1);
     printf("b == %i   (okay? %s)\n", b.as.i32, b.is_okay ? "yes" : "no");
-
+*/
     return 0;
 }
