@@ -54,15 +54,12 @@ union SourceOfAnxiety {
     uint64_t u64;
 };
 
-#define EitherStruct(TYPE, DATA) \
-    struct { union SourceOfAnxiety as; bool is_okay; int type[TypeToId(DATA)]; }
-
 #define Okay(TYPE, DATA) {.as.TYPE=DATA, .is_okay=true, .type={0}}
 #define Err(TYPE, DATA)  {.as.TYPE=DATA, .is_okay=false, .type={0}}
 
-//struct {union SourceOfAnxiety as;} distress = {.as.chr = 'a'};
-#define Either(TYPE) EitherStruct(TYPE, \
-        ((struct { union SourceOfAnxiety as; }){.as.chr='a'}).as.TYPE)
+struct {union SourceOfAnxiety as;} distress = {.as.chr = 'a'};
+#define Either(TYPE) \
+    struct { union SourceOfAnxiety as; bool is_okay; int type[TypeToId(distress.as.TYPE)]; }
 
 int main()
 {
