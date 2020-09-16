@@ -15,17 +15,17 @@
                     uint64_t:  11, \
                     default:    1)
 
-static int _data[TypeToId((void*)1)]    = {1};
-static int _str [TypeToId((char*)1)]    = {2};
-static int _chr [TypeToId((char)1)]     = {3};
-static int _i8  [TypeToId((int8_t)1)]   = {4};
-static int _u8  [TypeToId((uint8_t)1)]  = {5};
-static int _i16 [TypeToId((int16_t)1)]  = {6};
-static int _u16 [TypeToId((uint16_t)1)] = {7};
-static int _i32 [TypeToId((int32_t)1)]  = {8};
-static int _u32 [TypeToId((uint32_t)1)] = {9};
-static int _i64 [TypeToId((int64_t)1)]  = {10};
-static int _u64 [TypeToId((uint64_t)1)] = {11};
+static int _data[TypeToId((void*)1)]    = {0};
+static int _str [TypeToId((char*)1)]    = {0};
+static int _chr [TypeToId((char)1)]     = {0};
+static int _i8  [TypeToId((int8_t)1)]   = {0};
+static int _u8  [TypeToId((uint8_t)1)]  = {0};
+static int _i16 [TypeToId((int16_t)1)]  = {0};
+static int _u16 [TypeToId((uint16_t)1)] = {0};
+static int _i32 [TypeToId((int32_t)1)]  = {0};
+static int _u32 [TypeToId((uint32_t)1)] = {0};
+static int _i64 [TypeToId((int64_t)1)]  = {0};
+static int _u64 [TypeToId((uint64_t)1)] = {0};
 
 #define Value(e) _Generic( (&(e.type)),\
                             int(*)[ 1]: e.as.data,  \
