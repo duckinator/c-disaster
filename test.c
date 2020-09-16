@@ -2,18 +2,22 @@
 #include <stdint.h>
 #include <stdio.h>
 
-#define Either(TYPE) struct { TYPE value; bool is_okay; }
-#define Okay(VALUE) {.value=VALUE, .is_okay=true}
-#define Err(VALUE)  {.value=VALUE, .is_okay=false}
+#define Result(TYPE) struct { TYPE value; bool is_ok; bool is_err; }
+#define Ok(VALUE) {.value=VALUE, .is_ok=1, .is_err=0}
+#define Err(VALUE)  {.value=VALUE, .is_ok=0, .is_err=1}
 #define Value(VALUE) (VALUE.value)
 
 int main()
 {
-    Either(int32_t) a = Okay(1234);
-    printf("a == %i (okay? %s)\n", Value(a), a.is_okay ? "yes" : "no");
+    Result(int32_t) a = Ok(1234);
+    printf("a == %i (okay? %s; error? %s)\n", Value(a),
+            a.is_ok ? "yes" : "no",
+            a.is_err? "yes": "no");
 
-    Either(char) b = Err('x');
-    printf("b == %c (okay? %s)\n", Value(b), b.is_okay ? "yes" : "no");
+    Result(char) b = Err('x');
+    printf("b == %c (okay? %s; error? %s)\n", Value(b),
+            b.is_ok ? "yes" : "no",
+            b.is_err? "yes" : "no");
 
     return 0;
 }
