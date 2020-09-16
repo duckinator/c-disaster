@@ -54,10 +54,6 @@ union SourceOfAnxiety {
     uint64_t u64;
 };
 
-#define EitherStruct(TYPE, DATA) \
-    struct { union SourceOfAnxiety as; bool is_okay; int type[TypeToId(DATA)]; }
-
-
 #define _TypeDisaster(TYPE) _Generic( (&(_##TYPE)),\
     int(*)[ 1]: (void*)1,  \
     int(*)[ 2]: (char*)1,   \
@@ -70,6 +66,9 @@ union SourceOfAnxiety {
     int(*)[ 9]: (uint32_t)1,   \
     int(*)[10]: (int64_t)1,   \
     int(*)[11]: (uint64_t)1)
+
+#define EitherStruct(TYPE, DATA) \
+    struct { union SourceOfAnxiety as; bool is_okay; int type[TypeToId(DATA)]; }
 
 #define Either(TYPE) EitherStruct(TYPE, _TypeDisaster(TYPE))
 
