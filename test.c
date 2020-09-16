@@ -54,32 +54,15 @@ union SourceOfAnxiety {
     uint64_t u64;
 };
 
-#define _TypeDisaster(TYPE) _Generic( (&(_##TYPE)),\
-    int(*)[ 1]: (void*)1,  \
-    int(*)[ 2]: (char*)1,   \
-    int(*)[ 3]: (char)1,   \
-    int(*)[ 4]: (int8_t)1,    \
-    int(*)[ 5]: (uint8_t)1,    \
-    int(*)[ 6]: (int16_t)1,   \
-    int(*)[ 7]: (uint16_t)1,   \
-    int(*)[ 8]: (int32_t)1,   \
-    int(*)[ 9]: (uint32_t)1,   \
-    int(*)[10]: (int64_t)1,   \
-    int(*)[11]: (uint64_t)1)
-
 #define EitherStruct(TYPE, DATA) \
     struct { union SourceOfAnxiety as; bool is_okay; int type[TypeToId(DATA)]; }
-
-#define Either(TYPE) EitherStruct(TYPE, _TypeDisaster(TYPE))
 
 #define Okay(TYPE, DATA) {.as.TYPE=DATA, .is_okay=true, .type={0}}
 #define Err(TYPE, DATA)  {.as.TYPE=DATA, .is_okay=false, .type={0}}
 
-typedef struct either_s {
-    union SourceOfAnxiety as;
-    bool is_okay;
-    int type[12];
-} Either_t;
+//struct {union SourceOfAnxiety as;} distress = {.as.chr = 'a'};
+#define Either(TYPE) EitherStruct(TYPE, \
+        ((struct { union SourceOfAnxiety as; }){.as.chr='a'}).as.TYPE)
 
 int main()
 {
